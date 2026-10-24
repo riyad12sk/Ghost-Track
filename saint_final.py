@@ -8,6 +8,7 @@ from rich.pretty import pprint
 from tools.data.phone_processor import PhoneProcessor
 from tools.data.email_processor import EmailProcessor
 from tools.data.ip_processor import IPProcessor
+from tools.data.social_processor import SocialProcessor
 
 console = Console()
 
@@ -23,6 +24,7 @@ def main_menu():
     phone_proc = PhoneProcessor()
     email_proc = EmailProcessor()
     ip_proc = IPProcessor()
+    social_proc = SocialProcessor()
 
     while True:
         show_banner()
@@ -64,6 +66,14 @@ def main_menu():
             ip = input("Enter IP Address (e.g., 8.8.8.8): ").strip()
             if ip:
                 res = ip_proc.analyze_ip(ip)
+                pprint(res)
+            input("\nPress Enter to continue...")
+
+        elif choice == "5":
+            print("\n--- Social Media Analysis ---")
+            user = input("Enter Target Username (e.g., riyad12sk): ").strip()
+            if user:
+                res = social_proc.analyze_social(user)
                 pprint(res)
             input("\nPress Enter to continue...")
 
