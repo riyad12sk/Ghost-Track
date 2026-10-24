@@ -9,6 +9,7 @@ from tools.data.phone_processor import PhoneProcessor
 from tools.data.email_processor import EmailProcessor
 from tools.data.ip_processor import IPProcessor
 from tools.data.social_processor import SocialProcessor
+from tools.data.darkweb_processor import DarkWebProcessor
 
 console = Console()
 
@@ -25,6 +26,7 @@ def main_menu():
     email_proc = EmailProcessor()
     ip_proc = IPProcessor()
     social_proc = SocialProcessor()
+    darkweb_proc = DarkWebProcessor()
 
     while True:
         show_banner()
@@ -74,6 +76,14 @@ def main_menu():
             user = input("Enter Target Username (e.g., riyad12sk): ").strip()
             if user:
                 res = social_proc.analyze_social(user)
+                pprint(res)
+            input("\nPress Enter to continue...")
+
+        elif choice == "6":
+            print("\n--- Dark Web Scan ---")
+            query = input("Enter Target Email/Username/Keyword to scan: ").strip()
+            if query:
+                res = darkweb_proc.analyze_darkweb(query)
                 pprint(res)
             input("\nPress Enter to continue...")
 
