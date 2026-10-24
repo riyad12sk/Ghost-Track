@@ -11,6 +11,7 @@ from tools.data.ip_processor import IPProcessor
 from tools.data.social_processor import SocialProcessor
 from tools.data.darkweb_processor import DarkWebProcessor
 from tools.data.web_processor import WebProcessor
+from tools.data.history_processor import HistoryProcessor
 
 console = Console()
 
@@ -29,6 +30,7 @@ def main_menu():
     social_proc = SocialProcessor()
     darkweb_proc = DarkWebProcessor()
     web_proc = WebProcessor()
+    history_proc = HistoryProcessor()
 
     while True:
         show_banner()
@@ -95,6 +97,11 @@ def main_menu():
             if domain:
                 res = web_proc.analyze_website(domain)
                 pprint(res)
+            input("\nPress Enter to continue...")
+
+        elif choice == "8":
+            print("\n--- View Scan History ---")
+            history_proc.view_history()
             input("\nPress Enter to continue...")
 
         elif choice == "0":
