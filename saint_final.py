@@ -10,6 +10,7 @@ from tools.data.email_processor import EmailProcessor
 from tools.data.ip_processor import IPProcessor
 from tools.data.social_processor import SocialProcessor
 from tools.data.darkweb_processor import DarkWebProcessor
+from tools.data.web_processor import WebProcessor
 
 console = Console()
 
@@ -27,6 +28,7 @@ def main_menu():
     ip_proc = IPProcessor()
     social_proc = SocialProcessor()
     darkweb_proc = DarkWebProcessor()
+    web_proc = WebProcessor()
 
     while True:
         show_banner()
@@ -84,6 +86,14 @@ def main_menu():
             query = input("Enter Target Email/Username/Keyword to scan: ").strip()
             if query:
                 res = darkweb_proc.analyze_darkweb(query)
+                pprint(res)
+            input("\nPress Enter to continue...")
+
+        elif choice == "7":
+            print("\n--- Website Reconnaissance ---")
+            domain = input("Enter Target Domain (e.g., github.com): ").strip()
+            if domain:
+                res = web_proc.analyze_website(domain)
                 pprint(res)
             input("\nPress Enter to continue...")
 
