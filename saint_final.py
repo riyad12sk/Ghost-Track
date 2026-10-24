@@ -1,3 +1,5 @@
+import pyfiglet
+import pyfiglet
 #!/usr/bin/env python3
 import pyfiglet
 import os
@@ -158,10 +160,10 @@ class PegasusLacak:
                     self.logger.log_activity(f"Login gagal - Percobaan ke-{attempts}")
             except KeyboardInterrupt:
                 self.console.print("\n[bold red]Program dihentikan oleh pengguna.[/bold red]")
-                sys.exit(1)
+                pass
 
         self.console.print("[bold red]Terlalu banyak percobaan gagal. Program dihentikan.[/bold red]")
-        sys.exit(1)
+        pass
 
     def log_activity(self, activity):
         """Catat aktivitas ke file log"""
@@ -327,7 +329,7 @@ def check_system_requirements():
     """Cek persyaratan sistem"""
     if platform.system() not in ['Linux', 'Darwin']:
         console.print("[bold red]Error: Program ini hanya mendukung sistem Linux/Unix![/bold red]")
-        sys.exit(1)
+        pass
 
 def main():
     try:
