@@ -2,9 +2,9 @@ import os
 import sys
 from rich.console import Console
 from rich.panel import Panel
-from rich.pretty import pprint
 
 # Import processors
+from tools.data.nid_processor import NIDProcessor
 from tools.data.phone_processor import PhoneProcessor
 from tools.data.email_processor import EmailProcessor
 from tools.data.ip_processor import IPProcessor
@@ -12,6 +12,7 @@ from tools.data.social_processor import SocialProcessor
 from tools.data.darkweb_processor import DarkWebProcessor
 from tools.data.web_processor import WebProcessor
 from tools.data.history_processor import HistoryProcessor
+from tools.data.settings_processor import SettingsProcessor
 
 console = Console()
 
@@ -24,6 +25,7 @@ Phone & OSINT Toolkit | Developed by: SK BLACK | Version: 1.0.0
     console.print(f"[bold cyan]{banner}[/bold cyan]")
 
 def main_menu():
+    nid_proc = NIDProcessor()
     phone_proc = PhoneProcessor()
     email_proc = EmailProcessor()
     ip_proc = IPProcessor()
@@ -31,10 +33,11 @@ def main_menu():
     darkweb_proc = DarkWebProcessor()
     web_proc = WebProcessor()
     history_proc = HistoryProcessor()
+    settings_proc = SettingsProcessor()
 
     while True:
         show_banner()
-        print("[1] NIK Scanner")
+        print("[1] NID Scanner")
         print("[2] Phone Number Analysis")
         print("[3] Email Investigation")
         print("[4] IP Address Analysis")
@@ -48,61 +51,61 @@ def main_menu():
         choice = input("Select an option [1/2/3/4/5/6/7/8/9/0]: ").strip()
 
         if choice == "1":
-            print("\n[!] NIK Scanner selected...")
+            print("\n--- NID Scanner ---")
+            nid_input = input("Enter NID: ").strip()
+            if nid_input:
+                nid_proc.analyze_nid(nid_input)
             input("\nPress Enter to continue...")
 
         elif choice == "2":
             print("\n--- Phone Number Analysis ---")
             num = input("Enter phone number (format: +880xxx): ").strip()
             if num:
-                res = phone_proc.analyze_phone(num)
-                pprint(res)
+                phone_proc.analyze_phone(num)
             input("\nPress Enter to continue...")
 
         elif choice == "3":
             print("\n--- Email Investigation ---")
             email = input("Enter email address: ").strip()
             if email:
-                res = email_proc.analyze_email(email)
-                pprint(res)
+                email_proc.analyze_email(email)
             input("\nPress Enter to continue...")
 
         elif choice == "4":
             print("\n--- IP Address Analysis ---")
             ip = input("Enter IP Address (e.g., 8.8.8.8): ").strip()
             if ip:
-                res = ip_proc.analyze_ip(ip)
-                pprint(res)
+                ip_proc.analyze_ip(ip)
             input("\nPress Enter to continue...")
 
         elif choice == "5":
             print("\n--- Social Media Analysis ---")
             user = input("Enter Target Username (e.g., riyad12sk): ").strip()
             if user:
-                res = social_proc.analyze_social(user)
-                pprint(res)
+                social_proc.analyze_social(user)
             input("\nPress Enter to continue...")
 
         elif choice == "6":
             print("\n--- Dark Web Scan ---")
             query = input("Enter Target Email/Username/Keyword to scan: ").strip()
             if query:
-                res = darkweb_proc.analyze_darkweb(query)
-                pprint(res)
+                darkweb_proc.analyze_darkweb(query)
             input("\nPress Enter to continue...")
 
         elif choice == "7":
             print("\n--- Website Reconnaissance ---")
             domain = input("Enter Target Domain (e.g., github.com): ").strip()
             if domain:
-                res = web_proc.analyze_website(domain)
-                pprint(res)
+                web_proc.analyze_website(domain)
             input("\nPress Enter to continue...")
 
         elif choice == "8":
             print("\n--- View Scan History ---")
             history_proc.view_history()
             input("\nPress Enter to continue...")
+
+        elif choice == "9":
+            settings_proc.manage_settings()
 
         elif choice == "0":
             print("\n[+] Exiting Ghost-Track... Stay Safe!")

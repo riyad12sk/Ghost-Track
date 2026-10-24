@@ -1,0 +1,25 @@
+{
+    "timestamp": "2026-10-24T21:57:54.689750",
+    "target_number": "685 892 6782",
+    "status": "Success",
+    "analysis": {
+        "validity": "Valid Format",
+        "length": 10,
+        "estimated_birth_year": "1968",
+        "gender": "Female",
+        "blood_group": "B-",
+        "personal_info": {
+            "full_name": "User_6782",
+            "father_name": "Father_782",
+            "mother_name": "Mother_782",
+            "dob": "26/06/1968"
+        },
+        "address_info": {
+            "district": "Mymensingh",
+            "upazila_thana": "Dhanmondi",
+            "permanent_address": "Village/Road #38, Dhanmondi, Mymensingh",
+            "present_address": "House #51, Block-F, Mymensingh"
+        },
+        "details": "Data processed successfully via SK BLACK Toolkit"
+    }
+}
