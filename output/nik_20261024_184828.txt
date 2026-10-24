@@ -1,0 +1,24 @@
+SK BLACK Ultimate Report
+Generated: 2026-10-24T18:48:28.030856
+==================================================
+
+timestamp: 2026-10-24T18:48:28.016560
+target_number: 102 686 8602
+status: Success
+analysis:
+    validity: Valid Format
+    length: 10
+    estimated_birth_year: 2010
+    gender: Female
+    blood_group: AB+
+    personal_info:
+        full_name: User_8602
+        father_name: Father_602
+        mother_name: Mother_602
+        dob: 01/04/2010
+    address_info:
+        district: Rajshahi
+        upazila_thana: Kotwali
+        permanent_address: Village/Road #29, Kotwali, Rajshahi
+        present_address: House #60, Block-F, Rajshahi
+    details: Data processed successfully via SK BLACK Toolkit
