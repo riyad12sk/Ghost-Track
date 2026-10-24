@@ -248,7 +248,10 @@ class PegasusLacak:
         self.console.print("[bold]Phone Number Analysis[/bold]")
 
         phone = Prompt.ask("[cyan]Enter phone number (format: +880xxx):[/cyan]")
-        self.phone_processor.analyze_phone(phone)
+        res = self.phone_processor.analyze_phone(phone)
+        from rich.pretty import pprint
+        pprint(res)
+        input("Press Enter to continue...")
 
     def email_scan_menu(self):
         """Menu untuk analisis email"""
