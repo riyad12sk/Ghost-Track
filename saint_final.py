@@ -4,15 +4,16 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.pretty import pprint
 
-# Import modules from tools.data
+# Import processors
 from tools.data.phone_processor import PhoneProcessor
 from tools.data.email_processor import EmailProcessor
+from tools.data.ip_processor import IPProcessor
 
 console = Console()
 
 def show_banner():
     os.system('clear' if os.name != 'nt' else 'cls')
-    banner = """
+    banner = r"""
    / __ \/  _/\ \/ /   |  / __ \   /_  __/ __ \/  | / ____/ //_/
 Phone & OSINT Toolkit | Developed by: SK BLACK | Version: 1.0.0
     """
@@ -21,6 +22,7 @@ Phone & OSINT Toolkit | Developed by: SK BLACK | Version: 1.0.0
 def main_menu():
     phone_proc = PhoneProcessor()
     email_proc = EmailProcessor()
+    ip_proc = IPProcessor()
 
     while True:
         show_banner()
@@ -54,6 +56,14 @@ def main_menu():
             email = input("Enter email address: ").strip()
             if email:
                 res = email_proc.analyze_email(email)
+                pprint(res)
+            input("\nPress Enter to continue...")
+
+        elif choice == "4":
+            print("\n--- IP Address Analysis ---")
+            ip = input("Enter IP Address (e.g., 8.8.8.8): ").strip()
+            if ip:
+                res = ip_proc.analyze_ip(ip)
                 pprint(res)
             input("\nPress Enter to continue...")
 
