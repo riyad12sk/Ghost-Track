@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import pyfiglet
 import os
 import sys
 import hashlib
