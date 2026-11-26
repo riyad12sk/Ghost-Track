@@ -1,130 +1,125 @@
+import html
+import json
 import os
 import re
-import json
 from datetime import datetime
+
 from rich.console import Console
 from rich.table import Table
 
 console = Console()
 
+
 class NIDProcessor:
-    def __init__(self):
-        pass
+    """Perform local NID input-format checks only.
+
+    This class does not access Bangladesh Election Commission systems or
+    retrieve identity, demographic, address, or family information.
+    """
+
+    ACCEPTED_LENGTHS = (10, 13, 17)
 
     def analyze_nid(self, nid_number):
-        """Analyze NID with detailed parameters, rich table layout, and multiple file exports"""
-        clean_nid = re.sub(r'\D', '', nid_number.strip())
-        
-        if not clean_nid:
-            return {"error": True, "message": "Invalid NID format provided."}
+        raw_value = str(nid_number or "").strip()
+        digits = re.sub(r"\D", "", raw_value)
 
-        length = len(clean_nid)
-        valid = length in [10, 13, 17]
+        if not digits or not raw_value:
+            return {"error": True, "message": "Enter a NID number containing digits."}
 
-        # Extract last 4 digits for demo mockup generation
-        suffix = clean_nid[-4:] if length >= 4 else "0000"
+        only_digits = bool(re.fullmatch(r"[0-9\s-]+", raw_value))
+        recognized_length = len(digits) in self.ACCEPTED_LENGTHS
+        masked_nid = ("*" * max(0, len(digits) - 4)) + digits[-4:]
 
-        analysis_details = {
-            'validity': 'Valid Format' if valid else 'Invalid Format',
-            'length': length,
-            'estimated_birth_year': '1968',
-            'gender': 'Female',
-            'blood_group': 'B-',
-            'personal_info': {
-                'full_name': f'User_{suffix}',
-                'father_name': f'Father_{suffix[1:]}',
-                'mother_name': f'Mother_{suffix[1:]}',
-                'dob': '26/06/1968'
-            },
-            'address_info': {
-                'district': 'Mymensingh',
-                'upazila_thana': 'Dhanmondi',
-                'permanent_address': 'Village/Road #38, Dhanmondi, Mymensingh',
-                'present_address': 'House #51, Block-F, Mymensingh'
-            },
-            'details': 'Data processed successfully via SK BLACK Toolkit'
-        }
-
-        timestamp_str = datetime.now().isoformat()
-        timestamp_file = datetime.now().strftime("%Y%m%d_%H%M%S")
-
+        timestamp = datetime.now().astimezone().isoformat(timespec="seconds")
         result = {
-            "timestamp": timestamp_str,
-            "target_number": nid_number.strip(),
-            "status": "Success" if valid else "Failed",
-            "analysis": analysis_details
+            "timestamp": timestamp,
+            "target_nid": masked_nid,
+            "status": "Format check completed",
+            "checks": {
+                "digits_only": only_digits,
+                "digit_count": len(digits),
+                "recognized_common_length": recognized_length,
+                "format_result": (
+                    "Length matches a commonly used Bangladesh NID format; "
+                    "this does not verify that the number exists or is genuine."
+                    if only_digits and recognized_length
+                    else "Input does not match the expected digit-only/common-length pattern."
+                ),
+                "identity_verified": False,
+                "verification_method": "Local format check only; no government database/API queried."
+            },
+            "notice": (
+                "This tool cannot retrieve or verify a person's name, date of birth, "
+                "parents, blood group, photograph, or address. Use only an official "
+                "Election Commission verification service with authorized access."
+            )
         }
 
-        # Display Rich Table
-        table = Table(title="NID Analysis Results", show_header=True, header_style="bold magenta")
-        table.add_column("Key", style="bold cyan", width=18)
-        table.add_column("Value", style="bold green")
-
-        table.add_row("timestamp", timestamp_str)
-        table.add_row("target_number", nid_number.strip())
-        table.add_row("status", result["status"])
-        table.add_row("analysis", str(analysis_details))
-
+        table = Table(title="NID Format Check", show_header=True, header_style="bold cyan")
+        table.add_column("Field", style="bold")
+        table.add_column("Result")
+        table.add_row("Masked NID", masked_nid)
+        table.add_row("Digit count", str(len(digits)))
+        table.add_row("Digits-only input", "Yes" if only_digits else "No")
+        table.add_row("Common length", "Recognized" if recognized_length else "Not recognized")
+        table.add_row("Identity verified", "No")
         console.print(table)
 
-        # Save files (JSON, TXT, HTML)
         os.makedirs("output", exist_ok=True)
-        json_file = f"output/nid_{timestamp_file}.json"
-        txt_file = f"output/nid_{timestamp_file}.txt"
-        html_file = f"output/nid_{timestamp_file}.html"
+        filename_stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        base_path = os.path.join("output", f"nid_format_{filename_stamp}")
+        json_file = base_path + ".json"
+        txt_file = base_path + ".txt"
+        html_file = base_path + ".html"
 
-        # Save JSON
-        with open(json_file, "w", encoding="utf-8") as f:
-            json.dump(result, f, indent=4)
+        with open(json_file, "w", encoding="utf-8") as file:
+            json.dump(result, file, indent=2, ensure_ascii=False)
 
-        # Save TXT
-        with open(txt_file, "w", encoding="utf-8") as f:
-            f.write(f"NID Scan Report for {nid_number}\n")
-            f.write(f"Timestamp: {timestamp_str}\n")
-            f.write(f"Status: {result['status']}\n")
-            f.write(f"Analysis: {json.dumps(analysis_details, indent=2)}\n")
+        with open(txt_file, "w", encoding="utf-8") as file:
+            file.write("Ghost-Track NID Format Check\n")
+            file.write(f"Timestamp: {timestamp}\n")
+            file.write(f"Masked NID: {masked_nid}\n")
+            file.write(f"Digit count: {len(digits)}\n")
+            file.write(f"Digits only: {only_digits}\n")
+            file.write(f"Common length recognized: {recognized_length}\n")
+            file.write("Identity verified: No\n")
+            file.write(result["notice"] + "\n")
 
-        # Save HTML
-        self.generate_html_report(result, html_file)
-
-        console.print(f"\n[bold green]{datetime.now().strftime('%Y-%m-%d %H:%M:%S,%f')[:-3]} - SKBlackToolkit - INFO - User [system] -> Scan completed: nid - {nid_number.strip()}[/bold green]")
-        console.print("\n[bold green]Results saved:[/bold green]")
-        console.print(f"- JSON: {json_file}")
-        console.print(f"- TXT:  {txt_file}")
-        console.print(f"- HTML: {html_file}")
+        safe_result = html.escape(json.dumps(result, indent=2, ensure_ascii=False))
+        html_content = f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ghost-Track NID Format Check</title>
+<style>
+body{{font-family:Arial,sans-serif;background:#0f172a;color:#f8fafc;padding:24px}}
+main{{max-width:850px;margin:auto;background:#1e293b;padding:24px;border-radius:12px}}
+pre{{white-space:pre-wrap;overflow-wrap:anywhere;background:#0b1220;padding:16px;border-radius:8px}}
+.notice{{color:#fbbf24}}
+</style>
+</head>
+<body><main>
+<h1>Ghost-Track — NID Format Check</h1>
+<p>Masked NID: <strong>{html.escape(masked_nid)}</strong></p>
+<p class="notice">Format checking only. This report does not verify identity or retrieve government records.</p>
+<pre>{safe_result}</pre>
+</main></body></html>"""
+        with open(html_file, "w", encoding="utf-8") as file:
+            file.write(html_content)
 
         result["report_saved"] = html_file
+        result["reports"] = {"json": json_file, "txt": txt_file, "html": html_file}
+        console.print(f"\n[green]Reports saved:[/green] {json_file}, {txt_file}, {html_file}")
         return result
 
     def generate_html_report(self, data, filename):
-        html_content = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>NID OSINT Report - {data.get('target_number')}</title>
-            <style>
-                body {{ font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 20px; }}
-                .card {{ background: #1e293b; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }}
-                h2 {{ color: #38bdf8; border-bottom: 2px solid #38bdf8; padding-bottom: 5px; }}
-                table {{ width: 100%; border-collapse: collapse; margin-top: 10px; }}
-                th, td {{ text-align: left; padding: 10px; border-bottom: 1px solid #334155; }}
-                th {{ color: #94a3b8; }}
-                .status-ok {{ color: #4ade80; font-weight: bold; }}
-            </style>
-        </head>
-        <body>
-            <div class="card">
-                <h2>SK BLACK - NID Intelligence Report</h2>
-                <p><strong>Input NID:</strong> {data.get('target_number')}</p>
-                <p><strong>Timestamp:</strong> {data.get('timestamp')}</p>
-                <p><strong>Status:</strong> {data.get('status')}</p>
-            </div>
-            <div class="card">
-                <h2>Analysis Details</h2>
-                <pre>{json.dumps(data.get('analysis'), indent=2)}</pre>
-            </div>
-        </body>
-        </html>
-        """
-        with open(filename, "w", encoding="utf-8") as f:
-            f.write(html_content)
+        """Write a safe HTML report for a supplied NID format-check result."""
+        safe_data = html.escape(json.dumps(data, indent=2, ensure_ascii=False))
+        with open(filename, "w", encoding="utf-8") as file:
+            file.write(
+                "<!doctype html><html lang='en'><meta charset='utf-8'>"
+                "<title>NID Format Check</title><body>"
+                "<h1>NID Format Check — identity not verified</h1>"
+                f"<pre>{safe_data}</pre></body></html>"
+            )
