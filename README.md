@@ -129,13 +129,15 @@ To stop the application, select `0` in the menu. If the terminal is waiting for 
 
 ## 🧭 Main Menu Guide / মেনু ব্যবহার
 
-### 1 — NID Scanner
+### 1 — NID Format Check
 
-- Enter a value containing digits; the current processor accepts lengths of 10, 13, or 17 digits as a valid *format*.
-- It prints a Rich table and saves JSON, TXT, and HTML reports in `output/`.
-- **Critical limitation:** The personal details in the current `tools/data/nid_processor.py` are hard-coded demo values (including a sample name pattern, date, gender, blood group and address). They are **not fetched from Bangladesh NID records and are not real identity data**.
+- Enter a NID value containing digits (spaces and hyphens are allowed); the tool masks all but the last four digits in its reports.
+- Checks whether the input contains only permitted characters and whether its digit count matches a commonly used length (10, 13 or 17). This is a preliminary format check only—not official validation.
+- Prints a Rich table and saves JSON, TXT and HTML reports in `output/`. The full NID is not written into the reports.
+- It does not query Bangladesh Election Commission systems and cannot confirm that an NID exists, is genuine, or belongs to a particular person. It does not retrieve names, dates of birth, parents, photos, blood groups or addresses.
+- Real identity verification requires an official Election Commission verification service and credentials/access issued to an authorized organization. Do not use unofficial databases or scraped personal records.
 
-**বাংলা:** NID নম্বরের দৈর্ঘ্য/ফরম্যাট পরীক্ষা করে Demo রিপোর্ট তৈরি করে। এখানে দেখানো নাম, জন্মতারিখ, ঠিকানা, রক্তের গ্রুপ ইত্যাদি বাস্তব NID Database থেকে আসে না—কোডে Demo হিসেবে নির্ধারিত। এগুলো বিশ্বাস বা ব্যবহার করবেন না।
+**বাংলা:** NID নম্বর দিন (Space/Hyphen গ্রহণযোগ্য); রিপোর্টে শেষ ৪টি সংখ্যা ছাড়া বাকিটা Mask করা হয়। Tool শুধু অনুমোদিত Character ও ১০/১৩/১৭ সংখ্যার প্রচলিত দৈর্ঘ্য মিলিয়ে দেখে—এটি সরকারি যাচাই নয়। JSON/TXT/HTML রিপোর্ট তৈরি হয়, কিন্তু পূর্ণ NID রিপোর্টে লেখা হয় না। এটি Election Commission-এর Database-এ সংযোগ করে না এবং নাম, জন্মতারিখ, বাবা-মা, ছবি, রক্তের গ্রুপ বা ঠিকানা বের করে না। আসল যাচাইয়ের জন্য অনুমোদিত প্রতিষ্ঠানের Official Election Commission Verification Service ও বৈধ Access প্রয়োজন।
 
 ### 2 — Phone Number Analysis
 
