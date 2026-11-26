@@ -32,7 +32,7 @@ The main application currently exposes these menu options:
 
 | Menu | English | বাংলা |
 |---|---|---|
-| 1 | NID format/demo report | NID ফরম্যাট পরীক্ষা ও Demo রিপোর্ট |
+| 1 | Local NID input-format check with masked identifier and JSON/TXT/HTML reports; no identity lookup. | Masked NID নম্বরের স্থানীয় ফরম্যাট পরীক্ষা ও JSON/TXT/HTML রিপোর্ট; ব্যক্তিগত তথ্য lookup নয়। |
 | 2 | Phone number metadata and basic WhatsApp/Telegram link checks | ফোন নম্বরের metadata এবং WhatsApp/Telegram link check |
 | 3 | Email format/domain reachability and search links | ইমেইল ফরম্যাট, ডোমেইন reachability ও search link |
 | 4 | Public IP geolocation and ISP information | Public IP-এর অবস্থান ও ISP তথ্য |
@@ -263,7 +263,7 @@ Lists HTML report files in `output/`, newest first. It does not search every JSO
 | `tools/darkweb_scan.py` | Older Dark Web scanner stub; returns simulated/disabled results. / Simulated পুরোনো Scanner। |
 | `tools/darkweb/darkweb_scanner.py` | Experimental scanner configured with `api.darkweb.local` placeholder endpoints; not a working live service. / Placeholder API-সহ Experimental Module। |
 | `tools/investig_email.py` | Alternate email investigator; WHOIS domain info, but breach/social checks are disabled. / বিকল্প Email Investigator। |
-| `tools/nik_scan.py` | NIK/NID demo parser with generated sample data; not a real NID lookup. / Demo NID Parser। |
+| `tools/nid_scan.py` | Standalone local NID format-check helper; no personal-data lookup. / আলাদা NID ফরম্যাট পরীক্ষার Helper; ব্যক্তিগত তথ্য lookup নয়। |
 | `tools/osint/osint_tools.py` | Optional wrappers for external Sherlock and Holehe command-line tools; not connected to the main menu. / External CLI Tool wrapper। |
 | `tools/network/network_scan.py` | Optional Nmap-based basic/full/vulnerability scan wrapper; not connected to the main menu. / Nmap wrapper। |
 | `tools/social/analyz_social.py` | Alternate public social-profile page parser. / বিকল্প Social Analyzer। |
@@ -355,7 +355,7 @@ This example does not install native tools such as Nmap or libmagic, nor externa
 
 ## ⚠️ Known Limitations / সীমাবদ্ধতা
 
-1. **NID output is mock data.** The current NID processor does not connect to an official NID database.
+1. **NID is format-only.** The NID processor masks the identifier and checks input syntax/common digit count; it does not connect to an official NID database or verify identity.
 2. **Dark-web features are incomplete.** Some endpoints are placeholders or disabled; a simple HTTP status is not proof of a leak.
 3. **Social and messaging checks are heuristic.** HTTP status or public links cannot establish account ownership or registration with certainty.
 4. **IP geolocation is approximate.** It usually describes a network exit/provider, not a precise person location.
@@ -364,7 +364,7 @@ This example does not install native tools such as Nmap or libmagic, nor externa
 7. **Updater points to another project.** Do not use its update URL as the official Ghost-Track source.
 8. **`fix_menu.py` changes source code.** Do not execute it if the intention is to keep all source files unchanged.
 
-**বাংলা:** NID তথ্য Demo; Dark Web endpoint-এর কিছু অংশ Placeholder/Disabled; Social ও Messaging check নিশ্চিত নয়; IP location আনুমানিক; Optional Tool Main Menu-তে যুক্ত নয়; কিছু dependency requirements-এ নেই; Updater অন্য Repository-তে নির্দেশ করে; এবং `fix_menu.py` চালালে মূল Python ফাইল পরিবর্তনের চেষ্টা করে।
+**বাংলা:** NID অংশ শুধু Format Check করে—সরকারি পরিচয় যাচাই নয়; Dark Web endpoint-এর কিছু অংশ Placeholder/Disabled; Social ও Messaging check নিশ্চিত নয়; IP location আনুমানিক; Optional Tool Main Menu-তে যুক্ত নয়; কিছু dependency requirements-এ নেই; Updater অন্য Repository-তে নির্দেশ করে; এবং `fix_menu.py` চালালে মূল Python ফাইল পরিবর্তনের চেষ্টা করে।
 
 ---
 
